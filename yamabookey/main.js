@@ -1,8 +1,12 @@
 var ketinggian=0;
 var height=4.8;
 var height2=-0.2;
+var grammar = ['fruit', 'hello', 'black'];
+var allMonster = [];
+var scene = new THREE.Scene();
+
 function main(){
-    var scene = new THREE.Scene();
+    
     var left = -window.innerWidth/250,right =window.innerWidth/250 ,
     top = window.innerHeight/250,bottom = -window.innerHeight/250; 
 
@@ -41,7 +45,11 @@ function main(){
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-    var allMonster = [];
+
+    function momon(monster, text) {
+        this.monster = monster;
+        this.text = text;
+    }
 
     var spawnEnemy = function(posY,posX){
         if(posX<0){
@@ -53,20 +61,20 @@ function main(){
         var monster = new THREE.Sprite(spriteMat);
         monster.position.set(posX,posY,0);
         monster.scale.set(3,3,3);
-        allMonster.push(monster);
+        allMonster.push(new momon(monster, "hello"));
         scene.add(monster);
     };
 
-    var moveEnemy = function(delta, speed){
+    var moveEnemy = function(delta, speed){ //foreach(item in array)
         allMonster.forEach(mon => {
-            if(mon.position.x < -0.1){
-                mon.position.x += speed * delta;
+            if(mon.monster.position.x < -0.1){
+                mon.monster.position.x += speed * delta;
             }
-            else if(mon.position.x > 0.1){
-                mon.position.x -= speed * delta;
+            else if(mon.monster.position.x > 0.1){
+                mon.monster.position.x -= speed * delta;
             }
             else{
-                scene.remove(mon);
+                scene.remove(mon.monster);
             }
         });
     };
@@ -147,3 +155,19 @@ function main(){
 }
 
 main();
+
+function speechCorrect(output) 
+{
+    console.log("dari mainjs = " + output );
+    console.log(allMonster.length);
+    for (let i = 0; i < allMonster.length; i++) 
+    {
+        console.log(allMonster[i].text);
+        if(allMonster[i].text == output)
+        {
+            scene.remove(allMonster[i].monster);
+            allMonster.splice(i, 1);
+            break;
+        }
+    }
+}
