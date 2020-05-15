@@ -58,7 +58,7 @@ function main(){
     var delta = 0;
     var timeToSpawn=5;
     var timetoheight=1;
-    var timetoheight2=1;
+    var timetoheight2=0.3;
 
     //fungsi update
     var update = function(){
@@ -89,52 +89,12 @@ function main(){
     var text2 = document.createElement('div');
     var tinggi = function(){
         text2.style.position = 'absolute';
-        text2.style.fontSize = 30;
+        text2.style.fontSize = 35;
         text2.style.fontWeight='bold';
-        text2.innerHTML = ketinggian;
+        text2.innerHTML = ketinggian + ' m';
         text2.style.top = 45 + 'px';
         text2.style.left = 80 + 'px';
         document.body.appendChild(text2);
-        // var points = [];
-        // points.push( new THREE.Vector3( -2.5,-2, 1 ) );
-        // points.push( new THREE.Vector3( -2.5, 3, 1 ) );
-        // points.push( new THREE.Vector3( -2.495, -2, 1 ) );
-        // points.push( new THREE.Vector3( -2.495, 3, 1 ) );
-
-        // points.push( new THREE.Vector3( -2.495, 1.6, 1 ) ); //pendek
-        // points.push( new THREE.Vector3( -2.4, 1.6, 1 ) );
-        // points.push( new THREE.Vector3( -2.4, 1.601, 1 ) );
-        // points.push( new THREE.Vector3( -2.495, 1.601, 1 ) );
-        
-        // points.push( new THREE.Vector3( -2.495, 1.3, 1 ) ); //panjang
-        // points.push( new THREE.Vector3( -2.35, 1.3, 1 ) );
-        // points.push( new THREE.Vector3( -2.35, 1.301, 1 ) );
-        // points.push( new THREE.Vector3( -2.495, 1.301, 1 ) );
-
-        // points.push( new THREE.Vector3( -2.495, 1, 1 ) ); //pendek
-        // points.push( new THREE.Vector3( -2.4, 1, 1 ) );
-        // points.push( new THREE.Vector3( -2.4, 1.001, 1 ) );
-        // points.push( new THREE.Vector3( -2.495, 1.001, 1 ) );
-
-        // points.push( new THREE.Vector3( -2.495, 0.7, 1 ) ); //panjang
-        // points.push( new THREE.Vector3( -2.35, 0.7, 1 ) );
-        // points.push( new THREE.Vector3( -2.35, 0.701, 1 ) );
-        // points.push( new THREE.Vector3( -2.495, 0.701, 1 ) );
-
-        // points.push( new THREE.Vector3( -2.495, 0.4, 1 ) ); //pendek
-        // points.push( new THREE.Vector3( -2.4, 0.4, 1 ) );
-        // points.push( new THREE.Vector3( -2.4, 0.401, 1 ) );
-        // points.push( new THREE.Vector3( -2.495, 0.401, 1 ) );
-        
-
-        // var geometry = new THREE.BufferGeometry().setFromPoints( points );
-        
-        // var material = new THREE.LineBasicMaterial( {
-        //     color: 0x000000
-        // } );
-
-        // var line = new THREE.Line( geometry, material );
-        // scene.add( line );
     }
 
     //fungsi render
