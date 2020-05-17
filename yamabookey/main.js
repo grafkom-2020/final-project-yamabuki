@@ -84,7 +84,6 @@ function main(){
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-
     function momon(monster, text,arah,i) {
         this.monster = monster;
         this.text = text;
@@ -129,7 +128,55 @@ function main(){
             }
         });
     };
-    
+    var roketBoost = [];
+    var emission = 100;
+    var boostColor = [0xFF0000,0xf86a1b,0xf70d1a,0xc92d06];
+    for(i=0;i<emission;i++){
+        var sb = new THREE.SpriteMaterial({map:getTexture("circle.png"), color: boostColor[getRandomInt(4)]});
+        var spriteBoost = new THREE.Sprite(sb);
+        var sz = getRandomInt(10)/30;
+        spriteBoost.scale.set(sz,sz,0);
+        spriteBoost.position.set(getRandomInt(10)/30 - 0.15,0,0);
+        scene.add(spriteBoost);
+        roketBoost.push(spriteBoost);
+    }
+
+    var randomFastParticlePosition = function(){
+        pos = getRandomInt(right*2)-right;
+        return pos;
+    };
+
+    var fastParticle = [];
+    var fastEmission = 20;
+    for(i=0;i<fastEmission;i++){
+        var fp = new THREE.SpriteMaterial({map:getTexture("box.png")});
+        var spriteFast = new THREE.Sprite(fp);
+        spriteFast.scale.set(0.01,getRandomInt(10)/30+0.6,0);
+        spriteFast.position.set(randomFastParticlePosition(),top,0);
+        scene.add(spriteFast);
+        fastParticle.push(spriteFast);
+    }
+
+    var rocketMove = function(t,delta){
+        roket.position.y = Math.sin(t)/2;
+        roketBoost.forEach(r => {
+            r.position.y -= getRandomInt(10)* delta;
+            if(r.position.y<bottom){
+                r.position.y = roket.position.y-1;
+            }
+        });
+    };
+
+    var fastEffectParticle = function(){
+        fastParticle.forEach(f => {
+            f.position.y -= getRandomInt(20)* delta;
+            if(f.position.y<=bottom-1){
+                f.position.x = randomFastParticlePosition();
+                f.position.y = top+1;
+            }
+        });
+    };
+
     var spriteMat2 = new THREE.SpriteMaterial({map:getTexture("Asset.png")});
     var sprite2 = new THREE.Sprite(spriteMat2);
     var spriteMat3 = new THREE.SpriteMaterial({map:getTexture("Asset.png")});
@@ -142,6 +189,7 @@ function main(){
     //     sprite2.scale.set(1,5,1);
     //     scene.add(sprite2);
     // };
+
     // var ruler2 = function(x,y){
     //     sprite3.position.set(x,y,0);
     //     sprite3.scale.set(1,5,1);
@@ -153,6 +201,9 @@ function main(){
         z.scale.set(1,5,1);
         scene.add(z);
     }
+
+
+
     var delta = 0;
     var timeToSpawn=5;
     var timetoheight=1;
@@ -161,6 +212,9 @@ function main(){
     //fungsi update
     var update = function(){
         delta = clock.getDelta();
+        fastEffectParticle();
+        rocketMove(clock.elapsedTime, delta);
+        
         kanan.update(1000 * delta);
         kiri.update(1000 * delta);
         timeToSpawn -= delta;
@@ -248,7 +302,6 @@ function main(){
         }
     }
     
-
     //fungsi render
     var render = function(){
         renderer.render(scene,camera);
