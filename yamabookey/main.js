@@ -112,9 +112,9 @@ function main(){
         if(timetoheight2<0){
             timetoheight2=0.05;
             console.log(screen.width);
-            ruler(left+0.5,4.8-height%10);
+            ruler(left+0.5,5-height%10);
             height+=0.1;
-            ruler2(left+0.5,4.8-height2%10);
+            ruler2(left+0.5,5-height2%10);
             height2+=0.1;
         }
         
