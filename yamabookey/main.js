@@ -6,6 +6,7 @@ var height3 =-65;
 var rMon = [];
 var lMon = [];
 var allMonster = [];
+var STARTGAME = false;
 var scene = new THREE.Scene();
 var kanan,kiri;
 function main(){
@@ -32,6 +33,10 @@ function main(){
         return new THREE.TextureLoader().load(path);
     }
 
+    function showMainMenu(){
+
+    }
+
     var spriteMat = new THREE.SpriteMaterial({map:getTexture("bg.png")});
     var backGround = new THREE.Sprite(spriteMat);
     backGround.position.set(0,0,0);
@@ -43,22 +48,12 @@ function main(){
     roket.position.set(0,0,0);
     roket.scale.set(2.5,2.5,2.5);
     scene.add(roket); //ADD ROCKET
-    
-    // rMon.push(new THREE.SpriteMaterial({map:getTexture("Kanan/m2.png")}));
-    // rMon.push(new THREE.SpriteMaterial({map:getTexture("Kanan/m1.png")}));
-    // rMon.push(new THREE.SpriteMaterial({map:getTexture("Kanan/m3.png")}));
-    // rMon.push(new THREE.SpriteMaterial({map:getTexture("Kanan/m4.png")}));
-    // rMon.push(new THREE.SpriteMaterial({map:getTexture("Kanan/m5.png")}));
-    // rMon.push(new THREE.SpriteMaterial({map:getTexture("Kanan/m6.png")}));
-    // rMon.push(new THREE.SpriteMaterial({map:getTexture("Kanan/m7.png")}));
 
-    // lMon.push(new THREE.SpriteMaterial({map:getTexture("Kiri/m1.png")}));
-    // lMon.push(new THREE.SpriteMaterial({map:getTexture("Kiri/m2.png")}));
-    // lMon.push(new THREE.SpriteMaterial({map:getTexture("Kiri/m3.png")}));
-    // lMon.push(new THREE.SpriteMaterial({map:getTexture("Kiri/m4.png")}));
-    // lMon.push(new THREE.SpriteMaterial({map:getTexture("Kiri/m5.png")}));
-    // lMon.push(new THREE.SpriteMaterial({map:getTexture("Kiri/m6.png")}));
-    // lMon.push(new THREE.SpriteMaterial({map:getTexture("Kiri/m7.png")}));
+    var st = new THREE.SpriteMaterial({map:getTexture("title.png")});
+    var title = new THREE.Sprite(st);
+    title.scale.set(4,2,2);
+    title.position.set(0,1,0);
+    scene.add(title);
 
     var rMonsTexture = new THREE.ImageUtils.loadTexture( 'monsterAnim.png' );
 	kanan = new TextureAnimator( rMonsTexture, 7, 1, 7, 100 ); // texture, #horiz, #vert, #total, duration.
@@ -68,17 +63,6 @@ function main(){
 	kiri = new TextureAnimator( lMonsTexture, 7, 1, 7, 100 ); // texture, #horiz, #vert, #total, duration.
     var lMonsMaterial = new THREE.SpriteMaterial( { map: lMonsTexture } );
 
-	// var runner = new THREE.Sprite(rMonsMaterial);
-    // runner.position.set(0,0,0);
-    // runner.scale.set(3,3,3);
-    // scene.add(runner);
-
-    // var tes = new THREE.Sprite(lMonsMaterial);
-    // tes.position.set(2,2,2);
-    // tes.scale.set(3,3,3);
-    // scene.add(tes);
-    
-    // function animateMonster()
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
     }
@@ -163,9 +147,26 @@ function main(){
         scene.add(spriteFast);
         fastParticle.push(spriteFast);
     }
-
+    var inPlay = false;
     var rocketMove = function(t,delta){
-        roket.position.y = Math.sin(t)/2;
+        if(roket.position.y < Math.sin(t)/2 && !inPlay){
+            roket.position.y+= 1 * delta;
+        }
+        else{
+            inPlay = true;
+            roket.position.y = Math.sin(t)/2 ;
+        }
+        roketBoost.forEach(r => {
+            r.position.y -= getRandomInt(10)* delta;
+            if(r.position.y<bottom){
+                r.position.y = roket.position.y-1;
+            }
+        });
+        
+    };
+
+    var rocketMoveBeforeStart = function(t,delta){
+        roket.position.y = Math.sin(t)/2 - 1;
         roketBoost.forEach(r => {
             r.position.y -= getRandomInt(10)* delta;
             if(r.position.y<bottom){
@@ -209,59 +210,6 @@ function main(){
         scene.add(z);
     }
 
-
-
-    var delta = 0;
-    var timeToSpawn=5;
-    var timetoheight=1;
-    var timetoheight2=0.3;
-
-    //fungsi update
-    var update = function(){
-        delta = clock.getDelta();
-        fastEffectParticle();
-        rocketMove(clock.elapsedTime, delta);
-        
-        kanan.update(1000 * delta);
-        kiri.update(1000 * delta);
-        timeToSpawn -= delta;
-        if(timeToSpawn<0){
-            var x,leftRight = getRandomInt(2);
-            if(leftRight==0) x = -5;
-            else x = 5; 
-            spawnEnemy(getRandomInt(4)-2, x);
-            timeToSpawn=10;
-        }
-        moveEnemy(delta, 0.5);
-        timetoheight-=delta; //waktu kecepatan tinggi
-        if(timetoheight<0){
-            ketinggian+=10;
-            timetoheight=0.5;
-        }
-        timetoheight2-=delta;
-        if(timetoheight2<0){
-            timetoheight2=0.05;
-            // console.log(screen.width);
-            // ruler(left+0.5,4.8-height%10,sprite2);
-            // height+=0.1;
-            // ruler2(left+0.5,4.8-height2%10,sprite3);
-            // height2+=0.1;
-            if (height  >= 85) height  = -65;
-            if (height2 >= 85) height2 = -65;
-            if (height3 >= 85) height3 = -65;
-            
-            ruler(left+0.5,-height/10 ,sprite2);
-            ruler(left+0.5,-height2/10,sprite3);
-            ruler(left+0.5,-height3/10,sprite4);
-
-            height +=1;
-            height2+=1;
-            height3+=1;
-        }
-
-            
-    };
-    
     var spriteLove1 = new THREE.SpriteMaterial({map:getTexture("love.png")});
     var love1 = new THREE.Sprite(spriteLove1);
     var spriteLove2 = new THREE.SpriteMaterial({map:getTexture("love.png")});
@@ -273,13 +221,13 @@ function main(){
         if(died==0){
             love1.position.set(left+0.8,top-0.9,0);
             love1.scale.set(0.3,0.3,0);
-            scene.add(love1);
+            //scene.add(love1);
             love2.position.set(left+1.2,top-0.9,0);
             love2.scale.set(0.3,0.3,0);
-            scene.add(love2);
+            //scene.add(love2);
             love3.position.set(left+1.6,top-0.9,0);
             love3.scale.set(0.3,0.3,0);
-            scene.add(love3);
+            //scene.add(love3);
         }
         else if(died==1) scene.remove(love3);
         else if(died==2) scene.remove(love2);    
@@ -293,6 +241,60 @@ function main(){
             }
         }
     }
+
+    var delta = 0;
+    var timeToSpawn=5;
+    var timetoheight=1;
+    var timetoheight2=0.3;
+
+    //fungsi update
+    var update = function(){
+        delta = clock.getDelta();
+        fastEffectParticle();
+        
+        if(!STARTGAME){
+            rocketMoveBeforeStart(clock.elapsedTime,delta);
+        }
+        else{
+            rocketMove(clock.elapsedTime, delta);
+            kanan.update(1000 * delta);
+            kiri.update(1000 * delta);
+            timeToSpawn -= delta;
+            if(timeToSpawn<0){
+                var x,leftRight = getRandomInt(2);
+                if(leftRight==0) x = -5;
+                else x = 5; 
+                spawnEnemy(getRandomInt(4)-2, x);
+                timeToSpawn=10;
+            }
+            moveEnemy(delta, 0.5);
+            timetoheight-=delta; //waktu kecepatan tinggi
+            if(timetoheight<0){
+                ketinggian+=10;
+                timetoheight=0.5;
+            }
+            timetoheight2-=delta;
+            if(timetoheight2<0){
+                timetoheight2=0.05;
+                // console.log(screen.width);
+                // ruler(left+0.5,4.8-height%10,sprite2);
+                // height+=0.1;
+                // ruler2(left+0.5,4.8-height2%10,sprite3);
+                // height2+=0.1;
+                if (height  >= 85) height  = -65;
+                if (height2 >= 85) height2 = -65;
+                if (height3 >= 85) height3 = -65;
+                
+                ruler(left+0.5,-height/10 ,sprite2);
+                ruler(left+0.5,-height2/10,sprite3);
+                ruler(left+0.5,-height3/10,sprite4);
+
+                height +=1;
+                height2+=1;
+                height3+=1;
+            }
+        }   
+    };
 
     var text2 = document.createElement('div');
     var tinggi = function(){
@@ -308,10 +310,16 @@ function main(){
     var freeze = false;
     document.addEventListener('keydown', onKeydown, false);
     function onKeydown(event) {
-        if (event.keyCode == 32) {
-            if (freeze == true) freeze = false;
-            else freeze = true;
+        if(event.keyCode == 32 && !STARTGAME){
+            STARTGAME = true;
+            scene.remove(title);
+            scene.add(love1); scene.add(love2); scene.add(love3);
+            return;
         }
+        // if (event.keyCode == 32) {
+        //     if (freeze == true) freeze = false;
+        //     else freeze = true;
+        // }
     }
     
     //fungsi render
@@ -327,8 +335,7 @@ function main(){
         if(!freeze){
             update();
             render();
-        }
-        
+        }  
     };
     function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDuration) 
 {	
