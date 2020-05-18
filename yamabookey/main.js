@@ -286,6 +286,11 @@ function main(){
         else{
             scene.remove(love1);
             gameover=true;
+
+            if(getHighscore() < ketinggian)
+            {
+                setHighscore(ketinggian);
+            }
         }
     }
 
@@ -313,7 +318,8 @@ function main(){
     var render = function(){
         renderer.render(scene,camera);
         tinggi();
-        life();
+        if(!gameover)
+            life();
     };
 
     var GameLoop = function(){
@@ -363,6 +369,17 @@ function main(){
 	};
 }	
     GameLoop();
+
+    function setHighscore(number) {
+        localStorage.setItem('highscore', JSON.stringify(number));
+    }
+      
+    function getHighscore() {
+        var highscore = JSON.parse(localStorage.getItem('highscore'));
+        console.log(highscore);
+        return highscore;
+        // if(highscore > 120)
+    }
 }
 
 main();
