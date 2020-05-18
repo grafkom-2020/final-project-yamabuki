@@ -3,7 +3,6 @@ var died=0; //nyawa
 var height  =-15;
 var height2 = 35;
 var height3 =-65;
-var grammar = ['fruit', 'hello', 'black'];
 var rMon = [];
 var lMon = [];
 var allMonster = [];
@@ -90,7 +89,14 @@ function main(){
         this.arah = arah;
         //1 kanan, 2 kiri
         this.i = i
-
+    }
+    var grammar = ["fruit", "hello", "black"];
+    function randomKataMonster()
+    {
+        var strKata, randint = getRandomInt(3);
+        strKata = grammar[randint];
+        console.log("random = " + grammar[randint]);
+        return strKata;
     }
 
     var spawnEnemy = function(posY,posX){
@@ -109,7 +115,8 @@ function main(){
         monster.position.set(posX,posY,0);
         monster.scale.set(3,3,3);
         monster.needsUpdate = true;
-        allMonster.push(new momon(monster, "hello",arah,0));
+        allMonster.push(new momon(monster, randomKataMonster(),arah,0));
+
         scene.add(monster);
     };
 
@@ -363,7 +370,7 @@ main();
 function speechCorrect(output) 
 {
     console.log("dari mainjs = " + output );
-    console.log(allMonster.length);
+    console.log("jumlah momon = " + allMonster.length);
     for (let i = 0; i < allMonster.length; i++) 
     {
         console.log(allMonster[i].text);
