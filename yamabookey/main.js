@@ -95,6 +95,7 @@ function main(){
             if(mon.position.y < -5){
                 scene.remove(mon);
                 fallen.pop(mon);
+                allMonster.pop(mon);
             }
             // else if(mon.monster.position.x > 0.1){
             //     mon.monster.position.x -= speed * delta;
@@ -137,6 +138,15 @@ function main(){
 
     var moveEnemy = function(delta, speed){ //foreach(item in array)
         allMonster.forEach(mon => {
+            var yDistance = roket.position.y - mon.monster.position.y;
+            if(yDistance > 0.1)
+            {
+                mon.monster.position.y += speed * delta;
+            }
+            else if(yDistance < 0.1)
+            {
+                mon.monster.position.y -= speed * delta;
+            }
             if(mon.monster.position.x < -0.1){
                 mon.monster.position.x += speed * delta;
             }
@@ -325,7 +335,9 @@ function main(){
                 // if(r.position.y<bottom){
                 //     r.position.y = roket.position.y-1;
                 // }
+                
             });
+            high();
         }
     };
 
