@@ -70,9 +70,10 @@ function main(){
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-    function momon(monster, text,arah,i) {
+    function momon(monster, text, textperut,arah,i) {
         this.monster = monster;
         this.text = text;
+        this.textperut = textperut;
         this.arah = arah;
         //1 kanan, 2 kiri
         this.i = i
@@ -80,7 +81,7 @@ function main(){
     var grammar = ["baby", "basket", "black", "face", "final", "game", "go","hello","long","loud","now","salt","sugar","today","yellow"];
     function randomKataMonster()
     {
-        var strKata, randint = getRandomInt(3);
+        var strKata, randint = getRandomInt(15);
         strKata = grammar[randint];
         console.log("random = " + grammar[randint]);
         return strKata;
@@ -104,11 +105,6 @@ function main(){
         });
     }
 
-    var monster = new THREE.Sprite(rMonsMaterial);
-    monster.position.set(0,0,0);
-    monster.scale.set(3,3,3);
-    scene.add(monster);
-    fallen.push(monster);
 
     var perut; var textperut;
 
@@ -128,13 +124,17 @@ function main(){
         monster.position.set(posX,posY,0);
         monster.scale.set(3,3,3);
         monster.needsUpdate = true;
-        allMonster.push(new momon(monster, randomKataMonster(),arah,0));
+
+        var randText = randomKataMonster();
+        perut = new THREE.SpriteMaterial({map:getTexture("key/" + randText +".png")});
+        textperut = new THREE.Sprite(perut);
+
+        allMonster.push(new momon(monster, randText, textperut, arah,0));
 
         scene.add(monster);
 
-        perut = new THREE.SpriteMaterial({map:getTexture("key/" + allMonster[0].text +".png")});
-        textperut = new THREE.Sprite(perut);
-        textperut.scale.set(0.2,0.2,0.2);
+        
+        textperut.scale.set(0.3,0.2,0.2);
         textperut.position.set(posX,posY-0.3,1);
         scene.add(textperut);
 
@@ -146,26 +146,27 @@ function main(){
             if(yDistance > 0.1)
             {
                 mon.monster.position.y += speed * delta;
-                textperut.position.y += speed*delta;
+                mon.textperut.position.y = mon.monster.position.y - 0.3;
             }
             else if(yDistance < 0.1)
             {
                 mon.monster.position.y -= speed * delta;
-                textperut.position.y -= speed*delta;
+                mon.textperut.position.y = mon.monster.position.y - 0.3;
             }
             if(mon.monster.position.x < -0.1){
                 mon.monster.position.x += speed * delta;
-                textperut.position.x += speed*delta;
+                mon.textperut.position.x = mon.monster.position.x;
             }
             else if(mon.monster.position.x > 0.1){
                 mon.monster.position.x -= speed * delta;
-                textperut.position.x -= speed*delta;
+                mon.textperut.position.x = mon.monster.position.x;
             }
             else{
-                textperut.position.x=10;
+                scene.remove(mon.textperut);
                 died++; //nyawa
                 scene.remove(mon.monster);
                 allMonster.pop(mon.monster);
+                allMonster.pop(mon.textperut);
             }
         });
     };
@@ -488,7 +489,7 @@ function speechCorrect(output)
         console.log(allMonster[i].text);
         if(allMonster[i].text == output)
         {
-            // scene.remove(allMonster[i].monster);
+            scene.remove(allMonster[i].textperut);
             // allMonster.splice(i, 1);
             // break;
             fallen.push(allMonster[i].monster);
