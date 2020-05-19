@@ -34,11 +34,7 @@ function main(){
         return new THREE.TextureLoader().load(path);
     }
 
-    function showMainMenu(){
-
-    }
-
-    var spriteMat = new THREE.SpriteMaterial({map:getTexture("bg.png")});
+    var spriteMat = new THREE.SpriteMaterial({map:getTexture("box.png"), color:0xcdfcff});
     var backGround = new THREE.Sprite(spriteMat);
     backGround.position.set(0,0,0);
     backGround.scale.set(window.innerWidth,window.innerHeight,5);
@@ -56,10 +52,10 @@ function main(){
     title.position.set(0,1,0);
     scene.add(title);
 
-    var kalah = new THREE.SpriteMaterial({map:getTexture("kalah.png")});
+    var kalah = new THREE.SpriteMaterial({map:getTexture("gameover.png")});
     var lose = new THREE.Sprite(kalah);
-    lose.scale.set(4,2,2);
-    lose.position.set(0,1,0);
+    lose.scale.set(6,3,4);
+    lose.position.set(0,0,0);
     // scene.add(title);
 
     var rMonsTexture = new THREE.ImageUtils.loadTexture( 'monsterAnim.png' );
