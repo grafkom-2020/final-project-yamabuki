@@ -307,11 +307,25 @@ function main(){
         document.body.appendChild(text2);
     }
 
+    var text3 = document.createElement('div');
+    var high = function(){
+        text3.style.position = 'fixed';
+        text3.style.fontSize = 35;
+        text3.style.fontWeight='bold';
+        text3.innerHTML = 'highscore = ' + getHighscore();
+        text3.style.top = 45 + 'px';
+        text3.style.right = 80 + 'px';
+        text3.style.float = 'right';
+        document.body.appendChild(text3);
+    }
+    high();
+
     var freeze = false;
     document.addEventListener('keydown', onKeydown, false);
     function onKeydown(event) {
         if(event.keyCode == 32 && !STARTGAME){
             STARTGAME = true;
+            document.body.removeChild(text3);
             scene.remove(title);
             scene.add(love1); scene.add(love2); scene.add(love3);
             return;
@@ -326,6 +340,7 @@ function main(){
     var render = function(){
         renderer.render(scene,camera);
         tinggi();
+        // high();
         if(!gameover)
             life();
     };
@@ -383,6 +398,12 @@ function main(){
       
     function getHighscore() {
         var highscore = JSON.parse(localStorage.getItem('highscore'));
+        if(highscore == null)
+        {
+            setHighscore(0);
+            highscore = "0";
+        }
+            
         console.log(highscore);
         return highscore;
         // if(highscore > 120)
