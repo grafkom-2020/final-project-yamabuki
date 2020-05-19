@@ -2,7 +2,9 @@ var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
 
-var colors = [ 'aqua' , 'azure' , 'beige', 'bisque', 'black', 'blue', 'brown', 'chocolate', 'coral'];
+
+var colors = ["baby", "basket", "black", "face", "final", "game", "go","hello","long","loud","now","salt","sugar","today","yellow"];
+// var colors = [ 'aqua' , 'azure' , 'beige', 'bisque', 'black', 'blue', 'brown', 'chocolate', 'coral'];
 var grammar = '#JSGF V1.0; grammar colors; public <color> = ' + colors.join(' | ') + ' ;'
 
 var recognition = new SpeechRecognition();
@@ -28,7 +30,8 @@ document.body.onclick = function() {
   console.log('Ready to receive a color command.');
 }
 
-var kata = ['fruit', 'hello', 'black'];
+var kata = ["baby", "basket", "black", "face", "final", "game", "go","hello","long","loud","now","salt","sugar","today","yellow"];
+// var kata = ['fruit', 'hello', 'black'];
 
 recognition.onresult = function(event) {
     var output = event.results[0][0].transcript;

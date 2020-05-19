@@ -77,7 +77,7 @@ function main(){
         //1 kanan, 2 kiri
         this.i = i
     }
-    var grammar = ["fruit", "hello", "black"];
+    var grammar = ["baby", "basket", "black", "face", "final", "game", "go","hello","long","loud","now","salt","sugar","today","yellow"];
     function randomKataMonster()
     {
         var strKata, randint = getRandomInt(3);
@@ -110,6 +110,7 @@ function main(){
     scene.add(monster);
     fallen.push(monster);
 
+    var perut; var textperut;
 
     var spawnEnemy = function(posY,posX){
         if(posX<0){
@@ -130,6 +131,13 @@ function main(){
         allMonster.push(new momon(monster, randomKataMonster(),arah,0));
 
         scene.add(monster);
+
+        perut = new THREE.SpriteMaterial({map:getTexture("key/" + allMonster[0].text +".png")});
+        textperut = new THREE.Sprite(perut);
+        textperut.scale.set(0.2,0.2,0.2);
+        textperut.position.set(posX,posY-0.3,1);
+        scene.add(textperut);
+
     };
 
     var moveEnemy = function(delta, speed){ //foreach(item in array)
@@ -138,18 +146,23 @@ function main(){
             if(yDistance > 0.1)
             {
                 mon.monster.position.y += speed * delta;
+                textperut.position.y += speed*delta;
             }
             else if(yDistance < 0.1)
             {
                 mon.monster.position.y -= speed * delta;
+                textperut.position.y -= speed*delta;
             }
             if(mon.monster.position.x < -0.1){
                 mon.monster.position.x += speed * delta;
+                textperut.position.x += speed*delta;
             }
             else if(mon.monster.position.x > 0.1){
                 mon.monster.position.x -= speed * delta;
+                textperut.position.x -= speed*delta;
             }
             else{
+                textperut.position.x=10;
                 died++; //nyawa
                 scene.remove(mon.monster);
                 allMonster.pop(mon.monster);
